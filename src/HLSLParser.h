@@ -95,6 +95,7 @@ private:
     bool CheckForUnexpectedEndOfStream(int endToken);
 
     const HLSLStruct* FindUserDefinedType(const char* name) const;
+	const HLSLpreprocessor* FindPreprocessorDefinedType(const char* name) const;
 
     void BeginScope();
     void EndScope();
@@ -128,8 +129,11 @@ private:
         HLSLType        type;
     };
 
+	
+
     HLSLTokenizer           m_tokenizer;
     Array<HLSLStruct*>      m_userTypes;
+	Array<HLSLpreprocessor*>    m_preProcessors;
     Array<Variable>         m_variables;
     Array<HLSLFunction*>    m_functions;
     int                     m_numGlobals;

@@ -7,7 +7,7 @@ namespace M4
 {
 
 HLSLTree::HLSLTree(Allocator* allocator) :
-    m_allocator(allocator), m_stringPool(allocator)
+    m_allocator(allocator), m_stringPool(allocator), m_defineStringPool(allocator)
 {
     m_firstPage         = m_allocator->New<NodePage>();
     m_firstPage->next   = NULL;
@@ -41,6 +41,11 @@ void HLSLTree::AllocatePage()
 const char* HLSLTree::AddString(const char* string)
 {   
     return m_stringPool.AddString(string);
+}
+
+const char* HLSLTree::AddDefineString(const char* string)
+{
+	return m_defineStringPool.AddString(string);
 }
 
 const char* HLSLTree::AddStringFormat(const char* format, ...)

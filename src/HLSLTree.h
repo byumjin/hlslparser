@@ -45,46 +45,103 @@ enum HLSLNodeType
     HLSLNodeType_Attribute,
     HLSLNodeType_Pipeline,
     HLSLNodeType_Stage,
+	HLSLNodeType_Preprocessor,
 };
 
 enum HLSLBaseType
 {
     HLSLBaseType_Unknown,
     HLSLBaseType_Void,    
-    HLSLBaseType_Float,
-    HLSLBaseType_FirstNumeric = HLSLBaseType_Float,
-    HLSLBaseType_Float2,
-    HLSLBaseType_Float3,
-    HLSLBaseType_Float4,
+
+	HLSLBaseType_Float,
+	HLSLBaseType_FirstNumeric = HLSLBaseType_Float,
+	HLSLBaseType_Float1x2,
+	HLSLBaseType_Float1x3,
+	HLSLBaseType_Float1x4,
+	HLSLBaseType_Float2,
 	HLSLBaseType_Float2x2,
-    HLSLBaseType_Float3x3,
-    HLSLBaseType_Float4x4,
-    HLSLBaseType_Float4x3,
-    HLSLBaseType_Float4x2,
-    HLSLBaseType_Half,
-    HLSLBaseType_Half2,
-    HLSLBaseType_Half3,
-    HLSLBaseType_Half4,
+	HLSLBaseType_Float2x3,
+	HLSLBaseType_Float2x4,
+	HLSLBaseType_Float3,
+	HLSLBaseType_Float3x2,
+	HLSLBaseType_Float3x3,
+	HLSLBaseType_Float3x4,
+	HLSLBaseType_Float4,
+	HLSLBaseType_Float4x2,
+	HLSLBaseType_Float4x3,
+	HLSLBaseType_Float4x4,	
+
+	HLSLBaseType_Half,
+	HLSLBaseType_Half1x2,
+	HLSLBaseType_Half1x3,
+	HLSLBaseType_Half1x4,
+	HLSLBaseType_Half2,
 	HLSLBaseType_Half2x2,
-    HLSLBaseType_Half3x3,
-    HLSLBaseType_Half4x4,
-    HLSLBaseType_Half4x3,
-    HLSLBaseType_Half4x2,
-    HLSLBaseType_Bool,
-    HLSLBaseType_FirstInteger = HLSLBaseType_Bool,
+	HLSLBaseType_Half2x3,
+	HLSLBaseType_Half2x4,
+	HLSLBaseType_Half3,
+	HLSLBaseType_Half3x2,
+	HLSLBaseType_Half3x3,
+	HLSLBaseType_Half3x4,
+	HLSLBaseType_Half4,
+	HLSLBaseType_Half4x2,
+	HLSLBaseType_Half4x3,
+	HLSLBaseType_Half4x4,   
+	    
+	HLSLBaseType_Bool,	
+	HLSLBaseType_FirstInteger = HLSLBaseType_Bool,
+	HLSLBaseType_Bool1x2,
+	HLSLBaseType_Bool1x3,
+	HLSLBaseType_Bool1x4,
 	HLSLBaseType_Bool2,
+	HLSLBaseType_Bool2x2,
+	HLSLBaseType_Bool2x3,
+	HLSLBaseType_Bool2x4,
 	HLSLBaseType_Bool3,
+	HLSLBaseType_Bool3x2,
+	HLSLBaseType_Bool3x3,
+	HLSLBaseType_Bool3x4,
 	HLSLBaseType_Bool4,
-    HLSLBaseType_Int,
-    HLSLBaseType_Int2,
-    HLSLBaseType_Int3,
-    HLSLBaseType_Int4,
-    HLSLBaseType_Uint,
-    HLSLBaseType_Uint2,
-    HLSLBaseType_Uint3,
-    HLSLBaseType_Uint4,
-    HLSLBaseType_LastInteger = HLSLBaseType_Uint4,
-    HLSLBaseType_LastNumeric = HLSLBaseType_Uint4,
+	HLSLBaseType_Bool4x2,
+	HLSLBaseType_Bool4x3,
+	HLSLBaseType_Bool4x4,
+
+	HLSLBaseType_Int,
+	HLSLBaseType_Int1x2,
+	HLSLBaseType_Int1x3,
+	HLSLBaseType_Int1x4,
+	HLSLBaseType_Int2,
+	HLSLBaseType_Int2x2,
+	HLSLBaseType_Int2x3,
+	HLSLBaseType_Int2x4,
+	HLSLBaseType_Int3,
+	HLSLBaseType_Int3x2,
+	HLSLBaseType_Int3x3,
+	HLSLBaseType_Int3x4,
+	HLSLBaseType_Int4,
+	HLSLBaseType_Int4x2,
+	HLSLBaseType_Int4x3,
+	HLSLBaseType_Int4x4,
+
+	HLSLBaseType_Uint,
+	HLSLBaseType_Uint1x2,
+	HLSLBaseType_Uint1x3,
+	HLSLBaseType_Uint1x4,
+	HLSLBaseType_Uint2,
+	HLSLBaseType_Uint2x2,
+	HLSLBaseType_Uint2x3,
+	HLSLBaseType_Uint2x4,
+	HLSLBaseType_Uint3,
+	HLSLBaseType_Uint3x2,
+	HLSLBaseType_Uint3x3,
+	HLSLBaseType_Uint3x4,
+	HLSLBaseType_Uint4,	
+	HLSLBaseType_Uint4x2,
+	HLSLBaseType_Uint4x3,
+	HLSLBaseType_Uint4x4,
+	HLSLBaseType_LastInteger = HLSLBaseType_Uint4x4,
+	HLSLBaseType_LastNumeric = HLSLBaseType_Uint4x4,
+	    
     HLSLBaseType_Texture,
     HLSLBaseType_Sampler,           // @@ use type inference to determine sampler type.
     HLSLBaseType_Sampler2D,
@@ -112,8 +169,55 @@ inline bool IsSamplerType(HLSLBaseType baseType)
 
 inline bool IsMatrixType(HLSLBaseType baseType)
 {
-    return baseType == HLSLBaseType_Float3x3 || baseType == HLSLBaseType_Float4x4 || baseType == HLSLBaseType_Float4x3 || baseType == HLSLBaseType_Float4x2 ||
-        baseType == HLSLBaseType_Half3x3 || baseType == HLSLBaseType_Half4x4 || baseType == HLSLBaseType_Half4x3 || baseType == HLSLBaseType_Half4x2;
+	return  baseType == HLSLBaseType_Float2x2 ||
+		baseType == HLSLBaseType_Float2x3 ||
+		baseType == HLSLBaseType_Float2x4 ||
+		baseType == HLSLBaseType_Float3x2 ||
+		baseType == HLSLBaseType_Float3x3 ||
+		baseType == HLSLBaseType_Float3x4 ||
+		baseType == HLSLBaseType_Float4x2 ||
+		baseType == HLSLBaseType_Float4x3 ||
+		baseType == HLSLBaseType_Float4x4 ||
+
+		baseType == HLSLBaseType_Half2x2 ||
+		baseType == HLSLBaseType_Half2x3 ||
+		baseType == HLSLBaseType_Half2x4 ||
+		baseType == HLSLBaseType_Half3x2 ||
+		baseType == HLSLBaseType_Half3x3 ||
+		baseType == HLSLBaseType_Half3x4 ||
+		baseType == HLSLBaseType_Half4x2 ||
+		baseType == HLSLBaseType_Half4x3 ||
+		baseType == HLSLBaseType_Half4x4 ||
+
+		baseType == HLSLBaseType_Bool2x2 ||
+		baseType == HLSLBaseType_Bool2x3 ||
+		baseType == HLSLBaseType_Bool2x4 ||
+		baseType == HLSLBaseType_Bool3x2 ||
+		baseType == HLSLBaseType_Bool3x3 ||
+		baseType == HLSLBaseType_Bool3x4 ||
+		baseType == HLSLBaseType_Bool4x2 ||
+		baseType == HLSLBaseType_Bool4x3 ||
+		baseType == HLSLBaseType_Bool4x4 ||
+
+		baseType == HLSLBaseType_Int2x2 ||
+		baseType == HLSLBaseType_Int2x3 ||
+		baseType == HLSLBaseType_Int2x4 ||
+		baseType == HLSLBaseType_Int3x2 ||
+		baseType == HLSLBaseType_Int3x3 ||
+		baseType == HLSLBaseType_Int3x4 ||
+		baseType == HLSLBaseType_Int4x2 ||
+		baseType == HLSLBaseType_Int4x3 ||
+		baseType == HLSLBaseType_Int4x4 ||
+
+		baseType == HLSLBaseType_Uint2x2 ||
+		baseType == HLSLBaseType_Uint2x3 ||
+		baseType == HLSLBaseType_Uint2x4 ||
+		baseType == HLSLBaseType_Uint3x2 ||
+		baseType == HLSLBaseType_Uint3x3 ||
+		baseType == HLSLBaseType_Uint3x4 ||
+		baseType == HLSLBaseType_Uint4x2 ||
+		baseType == HLSLBaseType_Uint4x3 ||
+		baseType == HLSLBaseType_Uint4x4;
 }
 
 inline bool isScalarType( HLSLBaseType baseType )
@@ -360,6 +464,19 @@ struct HLSLDeclaration : public HLSLStatement
     HLSLDeclaration*    nextDeclaration;    // If multiple variables declared on a line.
     HLSLExpression*     assignment;
     HLSLBuffer*         buffer;
+};
+
+struct HLSLpreprocessor : public HLSLNode
+{
+	static const HLSLNodeType s_type = HLSLNodeType_Preprocessor;
+
+	HLSLpreprocessor()
+	{
+		name = NULL;
+	}
+
+	const char*     name;
+	HLSLType        type;
 };
 
 struct HLSLStruct : public HLSLStatement
@@ -787,6 +904,7 @@ public:
 
     /** Adds a string to the string pool used by the tree. */
     const char* AddString(const char* string);
+	const char* AddDefineString(const char* string);
     const char* AddStringFormat(const char* string, ...);
 
     /** Returns true if the string is contained within the tree. */
@@ -836,7 +954,10 @@ private:
     };
 
     Allocator*      m_allocator;
+
     StringPool      m_stringPool;
+	StringPool      m_defineStringPool;
+
     HLSLRoot*       m_root;
 
     NodePage*       m_firstPage;

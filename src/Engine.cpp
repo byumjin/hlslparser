@@ -40,7 +40,11 @@ int String_Printf(char * buffer, int size, const char * format, ...) {
 }
 
 int String_FormatFloat(char * buffer, int size, float value) {
-    return String_Printf(buffer, size, "%f", value);
+
+	if ( value != 0.0  &&  (abs(value) < 1.0e-6 || abs(value) > 1.0e+6))	
+		return String_Printf(buffer, size, "%e", value);
+	else
+	 return String_Printf(buffer, size, "%f", value);
 }
 
 bool String_Equal(const char * a, const char * b) {

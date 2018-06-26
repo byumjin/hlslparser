@@ -48,6 +48,7 @@ public:
 int String_Printf(char * buffer, int size, const char * format, ...);
 int String_PrintfArgList(char * buffer, int size, const char * format, va_list args);
 int String_FormatFloat(char * buffer, int size, float value);
+
 bool String_Equal(const char * a, const char * b);
 bool String_EqualNoCase(const char * a, const char * b);
 double String_ToDouble(const char * str, char ** end);

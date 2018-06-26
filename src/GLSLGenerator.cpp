@@ -1893,7 +1893,7 @@ const char* GLSLGenerator::GetBuiltInSemantic(const char* semantic, AttributeMod
 
         if (strncmp(semantic, "COLOR", 5) == 0)
             index = atoi(semantic + 5);
-        else if (strncmp(semantic, "SV_Target", 9) == 0)
+        else if (strncmp(semantic, "SV_Target", 9) == 0 || strncmp(semantic, "SV_TARGET", 9) == 0)
             index = atoi(semantic + 9);
 
         if (index >= 0)

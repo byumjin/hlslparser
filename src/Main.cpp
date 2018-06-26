@@ -58,7 +58,7 @@ int main( int argc, char* argv[] )
 	const char* fileName = NULL;
 	const char* entryName = NULL;
 
-	Target target = Target_FragmentShader;
+	Target target = Target_VertexShader;
 	Language language = Language_GLSL;
 
 	for( int argn = 1; argn < argc; ++argn )

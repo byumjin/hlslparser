@@ -276,7 +276,7 @@ bool HLSLGenerator::Generate(HLSLTree* tree, Target target, const char* entryNam
     if (!m_legacy)
     {
         // @@ Only emit code for sampler types that are actually used?
-
+		/*
         m_writer.WriteLine(0, "struct %s {", m_textureSampler2DStruct);
         m_writer.WriteLine(1, "Texture2D    t;");
         m_writer.WriteLine(1, "SamplerState s;");
@@ -320,7 +320,7 @@ bool HLSLGenerator::Generate(HLSLTree* tree, Target target, const char* entryNam
         m_writer.WriteLine(1, "ts.t = t; ts.s = s;");
         m_writer.WriteLine(1, "return ts;");
         m_writer.WriteLine(0, "}");
-        
+        */
         if (m_tree->GetContainsString("tex2D")) 
         {
             m_writer.WriteLine(0, "float4 %s(%s ts, float2 texCoord) {", m_tex2DFunction, m_textureSampler2DStruct);

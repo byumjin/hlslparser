@@ -16,36 +16,92 @@ namespace M4
 // The order here must match the order in the Token enum.
 static const char* _reservedWords[] =
     {
-        "float",
-        "float2",
-        "float3",
-        "float4",
+		// Built-in types.
+		"float",
+		"float1x2",
+		"float1x3",
+		"float1x4",
+		"float2",
 		"float2x2",
-        "float3x3",
-        "float4x4",
-        "float4x3",
-        "float4x2",
-        "half",
-        "half2",
-        "half3",
-        "half4",
+		"float2x3",
+		"float2x4",
+		"float3",
+		"float3x2",
+		"float3x3",
+		"float3x4",
+		"float4",
+		"float4x2",
+		"float4x3",
+		"float4x4",
+
+		"half",
+		"half1x2",
+		"half1x3",
+		"half1x4",
+		"half2",
 		"half2x2",
-        "half3x3",
-        "half4x4",
-        "half4x3",
-        "half4x2",
-        "bool",
+		"half2x3",
+		"half2x4",
+		"half3",
+		"half3x2",
+		"half3x3",
+		"half3x4",
+		"half4",
+		"half4x2",
+		"half4x3",
+		"half4x4",
+		                
+		"bool",
+		"bool1x2",
+		"bool1x3",
+		"bool1x4",
 		"bool2",
+		"bool2x2",
+		"bool2x3",
+		"bool2x4",
 		"bool3",
+		"bool3x2",
+		"bool3x3",
+		"bool3x4",
 		"bool4",
-        "int",
-        "int2",
-        "int3",
-        "int4",
-        "uint",
-        "uint2",
-        "uint3",
-        "uint4",
+		"bool4x2",
+		"bool4x3",
+		"bool4x4",
+
+		"int",
+		"int1x2",
+		"int1x3",
+		"int1x4",
+		"int2",
+		"int2x2",
+		"int2x3",
+		"int2x4",
+		"int3",
+		"int3x2",
+		"int3x3",
+		"int3x4",
+		"int4",
+		"int4x2",
+		"int4x3",
+		"int4x4",
+		
+		"uint",
+		"uint1x2",
+		"uint1x3",
+		"uint1x4",
+		"uint2",
+		"uint2x2",
+		"uint2x3",
+		"uint2x4",
+		"uint3",
+		"uint3x2",
+		"uint3x3",
+		"uint3x4",
+		"uint4",
+		"uint4x2",
+		"uint4x3",
+		"uint4x4",
+
         "texture",
         "sampler",
         "sampler2D",
@@ -54,6 +110,8 @@ static const char* _reservedWords[] =
         "sampler2DShadow",
         "sampler2DMS",
         "sampler2DArray",
+
+		// Reserved words.
         "if",
         "else",
         "for",
@@ -72,10 +130,28 @@ static const char* _reservedWords[] =
         "const",
         "static",
         "inline",
+
+		// Preprocessors
+		"#define",
+		"#elif",
+		"#else",
+		"#endif",
+		"#error",
+		"#if",
+		"#ifdef",
+		"#ifndef",
+		"#include",
+		"#line",
+		"#pragma",
+		"#undef",
+
+		// Input modifiers.
         "uniform",
         "in",
         "out",
         "inout",
+
+		// Effect keywords.
         "sampler_state",
         "technique",
         "pass",
@@ -363,6 +439,14 @@ bool HLSLTokenizer::ScanNumber()
 
     char* fEnd = NULL;
     double fValue = String_ToDouble(m_buffer, &fEnd);
+	
+	char dString[256] = {};
+
+	for (int i = 0; &m_buffer[i] != fEnd; i++)
+	{
+		dString[i] = m_buffer[i];
+	}
+	
 
     if (fEnd == m_buffer)
     {
@@ -371,25 +455,44 @@ bool HLSLTokenizer::ScanNumber()
 
     char*  iEnd = NULL;
     int    iValue = String_ToInteger(m_buffer, &iEnd);
-
-    // If the character after the number is an f then the f is treated as part
-    // of the number (to handle 1.0f syntax).
-	if( ( fEnd[ 0 ] == 'f' || fEnd[ 0 ] == 'h' ) && fEnd < m_bufferEnd )
-	{
-		++fEnd;
-	}
-
-	if( fEnd > iEnd && GetIsNumberSeparator( fEnd[ 0 ] ) )
+	
+	//  If the character has e, it is double
+	if (strstr(dString, "e") != NULL && fEnd > iEnd && GetIsNumberSeparator(fEnd[0]))
 	{
 		m_buffer = fEnd;
-		m_token = fEnd[ 0 ] == 'f' ? HLSLToken_FloatLiteral : HLSLToken_HalfLiteral;
-        m_fValue = static_cast<float>(fValue);
-        return true;
-    }
-    else if (iEnd > m_buffer && GetIsNumberSeparator(iEnd[0]))
+		m_token = HLSLToken_FloatLiteral;
+		m_fValue = static_cast<float>(fValue);
+		return true;
+	}
+	else
+	{
+		// If the character after the number is an f then the f is treated as part
+		// of the number (to handle 1.0f syntax).
+		if ((fEnd[0] == 'f' || fEnd[0] == 'h') && fEnd < m_bufferEnd)
+		{
+			++fEnd;
+		}
+
+		if (fEnd > iEnd && GetIsNumberSeparator(fEnd[0]))
+		{
+			m_buffer = fEnd;
+			m_token = fEnd[-1] == 'f' ? HLSLToken_FloatLiteral : HLSLToken_HalfLiteral;
+			m_fValue = static_cast<float>(fValue);
+			return true;
+		}
+	}
+
+    
+
+	if ((iEnd[0] == 'u' || fEnd[0] == 'i') && iEnd < m_bufferEnd)
+	{
+		++iEnd;
+	}
+
+    if (iEnd > m_buffer && GetIsNumberSeparator(iEnd[0]))
     {
         m_buffer = iEnd;
-        m_token  = HLSLToken_IntLiteral;
+        m_token = iEnd[-1] == 'u' ? HLSLToken_UintLiteral : HLSLToken_IntLiteral;
         m_iValue = iValue;
         return true;
     }
